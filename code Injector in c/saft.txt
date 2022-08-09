@@ -1,0 +1,12 @@
+teste
+  <WorkDate>2022-07-27</WorkDate>
+teste
+  <CustomerID>999999</CustomerID>
+  <DocumentTotals>
+sera adicionado aqui
+
+e aqui
+  <CustomerID>999999</CustomerID>
+  <DocumentTotals>
+aqui sera o fim
+aqui nao sera adiconado
