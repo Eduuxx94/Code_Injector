@@ -2,27 +2,60 @@
 #include <stdio.h>
 #include <fcntl.h>
 
+char	*ft_get_buff(char *line, char *buffer, t_vars var)
+{
+	var.i_line = 0;
+	var.i_buffer = 0;
+	var.temp = line;
+	while (var.temp && var.temp[var.i_line])
+		var.i_line++;
+	while (buffer && buffer[var.i_buffer] && buffer[var.i_buffer++] != '\n')
+		if (buffer && buffer[var.i_buffer] == '\n' && var.i_buffer++)
+			break ;
+	line = malloc(sizeof(char) * (var.i_line + var.i_buffer) + 1);
+	if (!line)
+		return (NULL);
+	line[var.i_line + var.i_buffer] = 0;
+	var.i_buffer = 0;
+	var.i_line = 0;
+	while (var.temp && var.temp[var.i_line] && ++var.i_line)
+		line[var.i_line - 1] = var.temp[var.i_line - 1];
+	free(var.temp);
+	while (buffer && buffer[var.i_buffer] && var.i_buffer < BUFFER_SIZE)
+	{
+		line[var.i_line + var.i_buffer] = buffer[var.i_buffer];
+		buffer[var.i_buffer] = '\0';
+		if (line[var.i_line + var.i_buffer++] == '\n')
+			break ;
+	}
+	return (line);
+}
+
 char	*get_next_line(int fd)
 {
-	static char	buff[BUFFER_SIZE];
-	int			buff_size;
 	char		*line;
-	int			line_size;
+	static char	buffer[FOPEN_MAX][BUFFER_SIZE + 1];
+	t_vars		var;
 
-	line_size = 0;
 	line = NULL;
-	buff_size = 0;
-	while (1)
+	while (fd < FOPEN_MAX && fd != -1)
 	{
-		if (!buff[0])
-			buff_size = read(fd, buff, BUFFER_SIZE);
-		else
-			buff_size = 1;
-		line_size += get_size_linha(buff);
-		if (buff_size > 0)
-			line = ft_realoc(line, buff, line_size, &buff_size);
-		if (buff_size <= 0)
+		var.i = 0;
+		var.j = 0;
+		if (!buffer[fd][0] && read(fd, buffer[fd], BUFFER_SIZE) <= 0)
 			return (line);
+		line = ft_get_buff(line, buffer[fd], var);
+		while (line && var.i < BUFFER_SIZE && buffer[fd][var.i] == '\0')
+			var.i++;
+		while (var.i < BUFFER_SIZE)
+		{
+			buffer[fd][var.j++] = buffer[fd][var.i];
+			buffer[fd][var.i++] = '\0';
+		}
+		var.i = 0;
+		while (line && line[var.i])
+			if (line[var.i++] == '\n')
+				return (line);
 	}
 	return (line);
 }

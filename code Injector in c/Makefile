@@ -4,7 +4,7 @@ SRC_PATH = ./srcs/
 OBJ_PATH = ./objs/
 INC_PATH = ./includes/
 
-GET_NEXT_LINE = get_next_line.c get_next_line_utils.c
+GET_NEXT_LINE = get_next_line.c
 
 SRC_NAME = main.c $(GET_NEXT_LINE)
 OBJ_NAME = $(SRC_NAME:.c=.o)
@@ -13,7 +13,7 @@ SRC = $(addprefix $(SRC_PATH), $(SRC_NAME))
 OBJ = $(addprefix $(OBJ_PATH), $(OBJ_NAME))
 
 CC = gcc
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g -fsanitize=address -Wall -Wextra -Werror
 
 $(OBJ_PATH)%.o:$(SRC_PATH)%.c
 	@mkdir -p $(OBJ_PATH)

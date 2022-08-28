@@ -31,37 +31,42 @@ void	ft_put_text(t_data *data)
 
 void	ft_write_file(t_data *data)
 {
-	if (data->current_line)
+	while (1)
 	{
-		if (data->last_line)
-			free (data->last_line);
-		data->last_line = data->current_line;
-	}
-	data->current_line = get_next_line(data->fd);
-	if (data->current_line && !strncmp(data->current_line,
-			"  <WorkDate>", 12)) //this will search in main code if line cointains the updated date
-	{
-		data->date[0] = data->current_line[12];
-		data->date[1] = data->current_line[13];
-		data->date[2] = data->current_line[14];
-		data->date[3] = data->current_line[15];
-		data->date[4] = data->current_line[16];
-		data->date[5] = data->current_line[17];
-		data->date[6] = data->current_line[18];
-		data->date[7] = data->current_line[19];
-		data->date[8] = data->current_line[20];
-		data->date[9] = data->current_line[21];
-	}
-	if (data->current_line && !strcmp(data->current_line,
-			"  <DocumentTotals>\n"))
-		if (data->last_line && !strcmp(data->last_line,
-				"  <CustomerID>999999</CustomerID>\n"))
-			ft_put_text(data);
-	if (data->current_line)
-	{
-		data->bytes_read = strlen(data->current_line);
-		write(data->file_out, data->current_line, (data->bytes_read));
-		ft_write_file(data);
+
+		if (data->current_line)
+		{
+			if (data->last_line)
+				free (data->last_line);
+			data->last_line = data->current_line;
+		}
+		data->current_line = get_next_line(data->fd);
+		if (data->current_line && !strncmp(data->current_line,
+					"  <WorkDate>", 12)) //this will search in main code if line cointains the updated date
+		{
+			data->date[0] = data->current_line[12];
+			data->date[1] = data->current_line[13];
+			data->date[2] = data->current_line[14];
+			data->date[3] = data->current_line[15];
+			data->date[4] = data->current_line[16];
+			data->date[5] = data->current_line[17];
+			data->date[6] = data->current_line[18];
+			data->date[7] = data->current_line[19];
+			data->date[8] = data->current_line[20];
+			data->date[9] = data->current_line[21];
+		}
+		if (data->current_line && !strcmp(data->current_line,
+				"  <DocumentTotals>\n"))
+			if (data->last_line && !strcmp(data->last_line,
+					"  <CustomerID>999999</CustomerID>\n"))
+				ft_put_text(data);
+		if (data->current_line)
+		{
+			data->bytes_read = strlen(data->current_line);
+			write(data->file_out, data->current_line, (data->bytes_read));
+		}
+		else
+			break ;
 	}
 }
 
