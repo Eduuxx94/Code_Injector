@@ -8,6 +8,7 @@
 # include <string.h>
 
 typedef struct s_data {
+	int		lineid;
 	int		bytes_read;
 	int		file_out;
 	int		fd;

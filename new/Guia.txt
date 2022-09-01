@@ -1,3 +1,0 @@
-Error 1: Invalid parameter file path
-error 2: Insert a file named 'value.txt' in main folder with all content to inject into the file
-Error 3: Error while creating a file
